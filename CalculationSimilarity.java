@@ -71,14 +71,55 @@ public class CalculationSimilarity extends Configured implements Tool{
 			char[] worthA=str[1].toCharArray();
 			int a=0;
 			int b=0;
-			double sum=0.0;
+			//double sum=0.0;
 			double similar=0.0;
-			for(int i=0;i<worthA.length;i++) {
+			
+			//欧式距离算法
+/*			for(int i=0;i<worthA.length;i++) {
 				a= worthA[i]-'0';
 				b= worthB[i]-'0';
 				sum += Math.pow((a-b), 2);
 			}
-			similar=1/(1+Math.sqrt(sum));
+			similar=1/(1+Math.sqrt(sum));*/
+			
+			//余弦距离算法
+			
+			double sumNumerator=0.0;
+			double denominatorA=0.0;
+			double denominatorB=0.0;
+			double cos=0.0;
+			for(int i=0;i<worthA.length;i++) {
+				a= worthA[i]-'0';
+				b= worthB[i]-'0';
+				sumNumerator += a*b;
+				denominatorA+=a*a;
+				denominatorB+=b*b;
+			}
+			cos=sumNumerator/(Math.sqrt(denominatorA)*Math.sqrt(denominatorB));
+			similar=0.5+0.5*cos;
+			
+/*			//皮尔逊相关系数算法
+			double sumNumerator=0.0;
+			double denominatorA=0.0;
+			double denominatorB=0.0;
+			double avgA=0.0;
+			double avgB=0.0;
+			for(int i=0;i<400;i++) {
+				a= worthA[i]-'0';
+				b= worthB[i]-'0';
+				avgA+=a;
+				avgB+=b;
+			}
+			avgA=avgA/400;
+			avgB=avgB/400;
+			for(int i=0;i<worthA.length;i++) {
+				a= worthA[i]-'0';
+				b= worthB[i]-'0';
+				sumNumerator += (a-avgA)*(b-avgB);
+				denominatorA+=(a-avgA)*(a-avgA);
+				denominatorB+=(b-avgB)*(b-avgB);
+			}
+			similar=sumNumerator/(Math.sqrt(denominatorA)*Math.sqrt(denominatorB));*/
 			
 			context.write(new Text(str[0]), new DoubleWritable(similar));
 		}
