@@ -1,0 +1,2 @@
+# HandWritingRecognition
+利用MapReduce进行手写识别
